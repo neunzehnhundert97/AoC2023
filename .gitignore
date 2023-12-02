@@ -1,0 +1,9 @@
+# IDE stuff
+.vscode
+
+# Scala
+.metals
+.bloop
+.scala-build
+
+*.data
