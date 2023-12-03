@@ -1,5 +1,3 @@
-import scala.annotation.meta.param
-
 val debug = false
 val filename = if (debug) "01.example.data" else "01.data"
 
