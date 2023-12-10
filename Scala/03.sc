@@ -41,8 +41,27 @@ def part1(input: List[String]) = {
 }
 
 def part2(input: List[String]) = {
-  parse(input)
-  0
+  val (numbers, symbols) = parse(input)
+  val gears = symbols.toList.filter(_._2 == '*').map(_._1).toSet
+  val adjecentGears = numbers
+    .flatMap { num =>
+      val (x, y) = num.startPos
+      val adjecents =
+        (x - 1).to(x + num.length).flatMap { xx =>
+          ((y - 1).to(y + 1)).map(yy => (xx, yy))
+        }
+      adjecents
+        .filter(gears.contains)
+        .map(g => g -> num.value)
+    }
+    .sortBy(_._1)
+
+  adjecentGears
+    .groupMap(_._1)(_._2)
+    .filter(_._2.length == 2)
+    .mapValues(_.product)
+    .map(_._2)
+    .sum
 }
 
 val exampleData = Source.fromFile("03.example.data").getLines().toList
@@ -58,8 +77,8 @@ println(part1(realData))
 
 println("Part 2:")
 val test2 = part2(exampleData)
-if (test2 != 8) {
-  println("Part 2 did not pass the test")
+if (test2 != 467835) {
+  println(s"Part 2 did not pass the test, it was ${test2}")
   sys.exit()
 }
 println(part2(realData))
